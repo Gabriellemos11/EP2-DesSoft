@@ -17,3 +17,9 @@ def remover_dado(dados_rolados, dados_no_estoque, dado_para_remover):
     dados_rolados.append(dado)
     dados_no_estoque.pop(dado_para_remover)
     return [dados_rolados, dados_no_estoque]
+
+def calcula_pontos_regra_simples(dados):
+    resultado = {}
+    for numero in dados:
+        resultado[numero] = resultado.get(numero, 0) + 1
+    returm resultado
