@@ -22,4 +22,4 @@ def calcula_pontos_regra_simples(dados):
     resultado = {}
     for numero in dados:
         resultado[numero] = resultado.get(numero, 0) + 1
-    returm resultado
+    return resultado
