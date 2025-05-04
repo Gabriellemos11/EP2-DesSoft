@@ -24,3 +24,6 @@ def calcula_pontos_regra_simples(dados):
         if numero in resultado:
             resultado[numero] += numero
     return resultado
+
+def calcula_pontos_soma(dados):
+    return sum(dados)
