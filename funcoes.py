@@ -14,5 +14,6 @@ def guardar_dado(dados_rolados, dados_no_estoque, dado_para_guardar):
 
 def remover_dado(dados_rolados, dados_no_estoque, dado_para_remover):
     dado = dados_no_estoque[dado_para_remover]
+    dados_rolados.append(dado)
     dados_no_estoque.pop(dado_para_remover)
-    return [dados_rolados + dado, dados_no_estoque]
+    return [dados_rolados, dados_no_estoque]
