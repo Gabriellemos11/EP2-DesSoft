@@ -32,7 +32,13 @@ def calcula_pontos_soma(dados):
     return total
 
 def calcula_pontos_sequencia_baixa(dados):
-    dados.sort()
-    if [1, 2, 3, 4] in dados:
-        return 15
+    conjunto = set(dados)
+    sequencias_baixas = [
+        {1, 2, 3, 4}.
+        {2, 3, 4, 5},
+        {3, 4, 5, 6}
+    ]
+    for sequencia in sequencias_baixas:
+        if sequencia.issubset(conjunto):
+            return 15
     return 0
