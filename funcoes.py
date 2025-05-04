@@ -34,7 +34,7 @@ def calcula_pontos_soma(dados):
 def calcula_pontos_sequencia_baixa(dados):
     conjunto = set(dados)
     sequencias_baixas = [
-        {1, 2, 3, 4}.
+        {1, 2, 3, 4},
         {2, 3, 4, 5},
         {3, 4, 5, 6}
     ]
