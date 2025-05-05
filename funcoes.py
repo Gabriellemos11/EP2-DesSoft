@@ -33,24 +33,17 @@ def calcula_pontos_soma(dados):
 
 def calcula_pontos_sequencia_baixa(dados):
     conjunto = set(dados)
-    sequencias_baixas = [
-        {1, 2, 3, 4},
-        {2, 3, 4, 5},
-        {3, 4, 5, 6}
-    ]
-    for sequencia in sequencias_baixas:
-        if sequencia.issubset(conjunto):
+    sequencias_baixas = [{1, 2, 3, 4}, {2, 3, 4, 5}, {3, 4, 5, 6}]
+    for seq in sequencias_baixas:
+        if seq.issubset(conjunto):
             return 15
     return 0
 
 def calcula_pontos_sequencia_alta(dados):
     conjunto = set(dados)
-    sequencias_altas = [
-        {1, 2, 3, 4, 5},
-        {2, 3, 4, 5, 6}
-    ]
-    for sequencia in sequencias_altas:
-        if sequencia.issubset(conjunto):
+    sequencias_altas = [{1, 2, 3, 4, 5}, {2, 3, 4, 5, 6}]
+    for seq in sequencias_altas:
+        if seq.issubset(conjunto):
             return 30
     return 0
 
@@ -58,42 +51,35 @@ def calcula_pontos_full_house(dados):
     contagens = {}
     for valor in dados:
         contagens[valor] = contagens.get(valor, 0) + 1
-
     if len(contagens) != 2:
         return 0
-
     valores = list(contagens.values())
     if 3 in valores and 2 in valores:
         total = 0
         for numero in dados:
             total += numero
         return total
-
     return 0
 
 def calcula_pontos_quadra(dados):
     contagens = {}
     for valor in dados:
         contagens[valor] = contagens.get(valor, 0) + 1
-
-    for quantidade in contagens.values():
-        if quantidade >= 4:
+    for qtd in contagens.values():
+        if qtd >= 4:
             total = 0
             for numero in dados:
                 total += numero
             return total
-
     return 0
 
 def calcula_pontos_quina(dados):
     contagens = {}
     for valor in dados:
         contagens[valor] = contagens.get(valor, 0) + 1
-
-    for quantidade in contagens.values():
-        if quantidade >= 5:
+    for qtd in contagens.values():
+        if qtd >= 5:
             return 50
-
     return 0
 
 def calcula_pontos_regra_avancada(dados):
@@ -108,27 +94,9 @@ def calcula_pontos_regra_avancada(dados):
 
 def faz_jogada(dados, categoria, cartela_de_pontos):
     if categoria in ['1', '2', '3', '4', '5', '6']:
-        pontos_simples = calcula_pontos_regra_simples(dados)
-        cartela_de_pontos['regra_simples'][int(categoria)] = pontos_simples[int(categoria)]
+        pontos = calcula_pontos_regra_simples(dados)
+        cartela_de_pontos['regra_simples'][int(categoria)] = pontos[int(categoria)]
     else:
-        pontos_avancados = calcula_pontos_regra_avancada(dados)
-        cartela_de_pontos['regra_avancada'][categoria] = pontos_avancados[categoria]
-    
+        pontos = calcula_pontos_regra_avancada(dados)
+        cartela_de_pontos['regra_avancada'][categoria] = pontos[categoria]
     return cartela_de_pontos
-
-def imprime_cartela(cartela):
-    print("Cartela de Pontos:")
-    print("-" * 25)
-    for i in range(1, 7):
-        filler = " " * (15 - len(str(i)))
-        if cartela['regra_simples'][i] != -1:
-            print(f"| {i}: {filler}| {cartela['regra_simples'][i]:02d} |")
-        else:
-            print(f"| {i}: {filler}|    |")
-    for chave in cartela['regra_avancada']:
-        filler = " " * (15 - len(str(chave)))
-        if cartela['regra_avancada'][chave] != -1:
-            print(f"| {chave}: {filler}| {cartela['regra_avancada'][chave]:02d} |")
-        else:
-            print(f"| {chave}: {filler}|    |")
-    print("-" * 25)
