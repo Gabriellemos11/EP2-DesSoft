@@ -44,6 +44,6 @@ def calcula_pontos_sequencia_baixa(dados):
     return 0
 
 def calcula_pontos_sequencia_alta(dados):
-    if dados == [1, 2, 3, 4, 5] or dados == [2, 3, 4, 5, 6]:
+    if [1, 2, 3, 4, 5] in dados or [2, 3, 4, 5, 6] in dados:
         return 30
     return 0
