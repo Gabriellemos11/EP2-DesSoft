@@ -44,10 +44,12 @@ def calcula_pontos_sequencia_baixa(dados):
     return 0
 
 def calcula_pontos_sequencia_alta(dados):
-    dados.sort()
-    if dados[:5] == [1, 2, 3, 4, 5]:
-        return 30
-    elif dados[:5] == [2, 3, 4, 5, 6]:
-        return 30
-    else:
-        return 0
+    conjunto = set(dados)
+    sequencias_altas = [
+        {1, 2, 3, 4, 5},
+        {2, 3, 4, 5, 6}
+    ]
+    for sequencia in sequencias_altas:
+        if sequencia.issubset(conjunto):
+            return 30
+    return 0
