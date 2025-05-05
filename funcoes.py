@@ -70,3 +70,18 @@ def calcula_pontos_full_house(dados):
         return total
 
     return 0
+
+def calcula_pontos_quadra(dados):
+    contagens = {}
+    for valor in dados:
+        contagens[valor] = contagens.get(valor, 0) + 1
+
+    for quantidade in contagens.values():
+        if quantidade >= 4:
+            total = 0
+            for numero in dados:
+                total += numero
+            return total
+
+    return 0
+
