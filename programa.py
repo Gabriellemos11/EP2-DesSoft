@@ -13,14 +13,31 @@ def inicializa_cartela():
         }
     }
 
+def imprime_cartela(cartela):
+    print("Cartela de Pontos:")
+    print("-"*25)
+    for i in range(1, 7):
+        filler = " " * (15 - len(str(i)))
+        if cartela['regra_simples'][i] != -1:
+            print(f"| {i}: {filler}| {cartela['regra_simples'][i]:02d} |")
+        else:
+            print(f"| {i}: {filler}|    |")
+    for i in cartela['regra_avancada']:
+        filler = " " * (15 - len(str(i)))
+        if cartela['regra_avancada'][i] != -1:
+            print(f"| {i}: {filler}| {cartela['regra_avancada'][i]:02d} |")
+        else:
+            print(f"| {i}: {filler}|    |")
+    print("-"*25)
+
 def pontuacao_total(cartela):
     total = 0
     simples = 0
-    for valor in cartela["regra_simples"].values():
+    for valor in cartela['regra_simples'].values():
         if valor != -1:
             total += valor
             simples += valor
-    for valor in cartela["regra_avancada"].values():
+    for valor in cartela['regra_avancada'].values():
         if valor != -1:
             total += valor
     if simples >= 63:
@@ -28,9 +45,8 @@ def pontuacao_total(cartela):
     return total
 
 cartela = inicializa_cartela()
-rodadas = 12
 
-for _ in range(rodadas):
+for _ in range(12):
     dados_rolados = rolar_dados(5)
     dados_guardados = []
     rerrolagens = 0
@@ -41,6 +57,7 @@ for _ in range(rodadas):
         print("Digite 1 para guardar um dado, 2 para remover um dado, 3 para rerrolar, 4 para ver a cartela ou 0 para marcar a pontuação:")
 
         opcao = input()
+
         if opcao == "1":
             print("Digite o índice do dado a ser guardado (0 a 4):")
             idx = int(input())
@@ -66,21 +83,21 @@ for _ in range(rodadas):
         elif opcao == "0":
             print("Digite a combinação desejada:")
             categoria = input()
-            if categoria in ['1', '2', '3', '4', '5', '6']:
-                cat_int = int(categoria)
-                if cartela["regra_simples"][cat_int] != -1:
+
+            todos_dados = dados_rolados + dados_guardados
+
+            if categoria in ["1", "2", "3", "4", "5", "6"]:
+                if cartela['regra_simples'][int(categoria)] != -1:
                     print("Essa combinação já foi utilizada.")
                 else:
-                    todos_dados = dados_rolados + dados_guardados
                     cartela = faz_jogada(todos_dados, categoria, cartela)
-                    break
+                    break  # encerra rodada
             elif categoria in cartela["regra_avancada"]:
-                if cartela["regra_avancada"][categoria] != -1:
+                if cartela['regra_avancada'][categoria] != -1:
                     print("Essa combinação já foi utilizada.")
                 else:
-                    todos_dados = dados_rolados + dados_guardados
                     cartela = faz_jogada(todos_dados, categoria, cartela)
-                    break
+                    break  # encerra rodada
             else:
                 print("Combinação inválida. Tente novamente.")
         else:
