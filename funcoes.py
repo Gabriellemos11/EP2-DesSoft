@@ -59,7 +59,8 @@ def calcula_pontos_full_house(dados):
     for valor in dados:
         contagens[valor] = contagens.get(valor, 0) + 1
 
-    valores = list(contagens.values())
-    if sorted(valores) == [2, 3]:
+    frequencias = sorted(contagens.values())
+    if frequencias == [2, 3]:
         return sum(dados)
-    return 0
+    else:
+        return 0
