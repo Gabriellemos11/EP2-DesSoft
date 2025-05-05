@@ -1,108 +1,70 @@
 from funcoes import *
 
-def inicializa_cartela():
-    return {
-        "regra_simples": {i: -1 for i in range(1, 7)},
-        "regra_avancada": {
-            "sem_combinacao": -1,
-            "quadra": -1,
-            "full_house": -1,
-            "sequencia_baixa": -1,
-            "sequencia_alta": -1,
-            "cinco_iguais": -1
-        }
-    }
+pontuacoes = {
+    '1': None,
+    '2': None,
+    '3': None,
+    '4': None,
+    '5': None,
+    '6': None,
+    'sem_combinacao': None,
+    'quadra': None,
+    'full_house': None,
+    'sequencia_baixa': None,
+    'sequencia_alta': None,
+    'cinco_iguais': None
+}
 
-def imprime_cartela(cartela):
-    print("Cartela de Pontos:")
-    print("-"*25)
-    for i in range(1, 7):
-        filler = " " * (15 - len(str(i)))
-        valor = cartela['regra_simples'][i]
-        linha = f"| {i}:{filler}| {'   ' if valor == -1 else f'{valor:02d}'} |"
-        print(linha)
-    for chave, valor in cartela['regra_avancada'].items():
-        filler = " " * (15 - len(str(chave)))
-        linha = f"| {chave}:{filler}| {'   ' if valor == -1 else f'{valor:02d}'} |"
-        print(linha)
-    print("-"*25)
-
-def pontuacao_total(cartela):
-    total = 0
-    simples = 0
-    for v in cartela["regra_simples"].values():
-        if v != -1:
-            total += v
-            simples += v
-    for v in cartela["regra_avancada"].values():
-        if v != -1:
-            total += v
-    if simples >= 63:
-        total += 35
-    return total
-
-cartela = inicializa_cartela()
 for _ in range(12):
-    dados_rolados = rolar_dados(5)
     dados_guardados = []
-    rerrolagens = 0
-    jogada_feita = False
+    dados_rolados = rolar_dados([])
+    print(f'Dados rolados: {dados_rolados}')
+    print(f'Dados guardados: {dados_guardados}')
 
-    while not jogada_feita:
-        print(f"Dados rolados: {dados_rolados}")
-        print(f"Dados guardados: {dados_guardados}")
-        print("Digite 1 para guardar, 2 para remover, 3 para rerrolar, 4 ver cartela, 0 marcar ponto:")
-
-        try:
-            opcao = input().strip()
-        except:
+    while True:
+        acao = int(input('Digite 1 para guardar um dado, 2 para remover um dado, 0 para parar: '))
+        if acao == 0:
             break
+        if acao == 1:
+            indice = int(input('Digite o índice do dado a ser guardado (0 a {}): '.format(len(dados_rolados) - 1)))
+            dado = dados_rolados.pop(indice)
+            dados_guardados.append(dado)
+        elif acao == 2:
+            indice = int(input('Digite o índice do dado a ser removido (0 a {}): '.format(len(dados_guardados) - 1)))
+            dados_guardados.pop(indice)
 
-        if opcao == "1":
-            if len(dados_rolados) > 0:
-                print("Índice do dado (0 a N):")
-                idx = int(input())
-                if 0 <= idx < len(dados_rolados):
-                    dados_rolados, dados_guardados = guardar_dado(dados_rolados, dados_guardados, idx)
+        dados_rolados = rolar_dados(dados_rolados)
+        print(f'Dados rolados: {dados_rolados}')
+        print(f'Dados guardados: {dados_guardados}')
 
-        elif opcao == "2":
-            if len(dados_guardados) > 0:
-                print("Índice do dado (0 a N):")
-                idx = int(input())
-                if 0 <= idx < len(dados_guardados):
-                    dados_rolados, dados_guardados = remover_dado(dados_rolados, dados_guardados, idx)
+    combinacao = input('Digite a combinação desejada: ')
+    pontos = calcula_pontuacao(combinacao, dados_guardados)
+    pontuacoes[combinacao] = pontos
 
-        elif opcao == "3":
-            if rerrolagens < 2:
-                rerrolagens += 1
-                dados_rolados = rolar_dados(len(dados_rolados))
-            else:
-                print("Rerrolagens esgotadas.")
+# Impressão da cartela de pontos
+print('Cartela de Pontos:')
+print('-------------------------')
+for chave in ['1', '2', '3', '4', '5', '6', 'sem_combinacao', 'quadra', 'full_house', 'sequencia_baixa', 'sequencia_alta', 'cinco_iguais']:
+    valor = pontuacoes[chave]
+    if valor is None:
+        valor_str = '   '
+    else:
+        valor_str = str(valor).zfill(2)
+    print(f'| {chave + ":":<16}| {valor_str} |')
+print('-------------------------')
 
-        elif opcao == "4":
-            imprime_cartela(cartela)
+# Soma dos pontos
+soma_simples = 0
+for i in range(1, 7):
+    if pontuacoes[str(i)] is not None:
+        soma_simples += pontuacoes[str(i)]
 
-        elif opcao == "0":
-            print("Digite a categoria:")
-            categoria = input().strip()
-            todos = dados_rolados + dados_guardados
+soma_total = 0
+for valor in pontuacoes.values():
+    if valor is not None:
+        soma_total += valor
 
-            if categoria in ['1','2','3','4','5','6']:
-                if cartela['regra_simples'][int(categoria)] == -1:
-                    cartela = faz_jogada(todos, categoria, cartela)
-                    jogada_feita = True
-                else:
-                    print("Já usada.")
-            elif categoria in cartela['regra_avancada']:
-                if cartela['regra_avancada'][categoria] == -1:
-                    cartela = faz_jogada(todos, categoria, cartela)
-                    jogada_feita = True
-                else:
-                    print("Já usada.")
-            else:
-                print("Categoria inválida.")
-        else:
-            print("Opção inválida.")
+if soma_simples >= 63:
+    soma_total += 35
 
-imprime_cartela(cartela)
-print(f"Pontuação total: {pontuacao_total(cartela)}")
+print(f'Pontuação total: {soma_total}')
