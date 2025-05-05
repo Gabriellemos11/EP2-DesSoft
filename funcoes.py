@@ -63,7 +63,10 @@ def calcula_pontos_full_house(dados):
         return 0
 
     valores = list(contagens.values())
-    if (3 in valores and 2 in valores):
-        return sum(dados)
+    if 3 in valores and 2 in valores:
+        total = 0
+        for numero in dados:
+            total += numero
+        return total
 
     return 0
