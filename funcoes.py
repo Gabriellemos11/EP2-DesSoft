@@ -95,3 +95,13 @@ def calcula_pontos_quina(dados):
             return 50
 
     return 0
+
+def calcula_pontos_regra_avancada(dados):
+    return (
+        calcula_pontos_quina(dados) +
+        calcula_pontos_full_house(dados) +
+        calcula_pontos_quadra(dados) +
+        calcula_pontos_soma(dados) +
+        calcula_pontos_sequencia_alta(dados) +
+        calcula_pontos_sequencia_baixa(dados)
+    )
