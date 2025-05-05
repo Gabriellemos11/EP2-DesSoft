@@ -86,7 +86,12 @@ def calcula_pontos_quadra(dados):
     return 0
 
 def calcula_pontos_quina(dados):
-    if len(dados) == 5:
-        return 50
-    return 0
+    contagens = {}
+    for valor in dados:
+        contagens[valor] = contagens.get(valor, 0) + 1
 
+    for quantidade in contagens.values():
+        if quantidade >= 5:
+            return 50
+
+    return 0
