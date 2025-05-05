@@ -55,7 +55,11 @@ def calcula_pontos_sequencia_alta(dados):
     return 0
 
 def calcula_pontos_full_house(dados):
+    contagens = {}
     for valor in dados:
-        if dados.count(valor) == 3 and dados.count(valor) == 2:
-            return sum(dados)
+        contagens[valor] = contagens.get(valor, 0) + 1
+
+    valores = list(contagens.values())
+    if sorted(valores) == [2, 3]:
+        return sum(dados)
     return 0
