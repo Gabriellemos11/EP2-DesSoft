@@ -116,9 +116,19 @@ def faz_jogada(dados, categoria, cartela_de_pontos):
     
     return cartela_de_pontos
 
-def faz_jogada(dados, categoria, cartela_de_pontos):
-    if categoria in ['1', '2', '3', '4', '5', '6']:
-        cartela_de_pontos['regra_simples'][categoria] = calcula_pontos_regra_simples(dados)
-    else:
-        cartela_de_pontos['regra_avancada'][categoria] = calcula_pontos_regra_avancada(dados)
-    return cartela_de_pontos
+def imprime_cartela(cartela):
+    print("Cartela de Pontos:")
+    print("-" * 25)
+    for i in range(1, 7):
+        filler = " " * (15 - len(str(i)))
+        if cartela['regra_simples'][i] != -1:
+            print(f"| {i}: {filler}| {cartela['regra_simples'][i]:02d} |")
+        else:
+            print(f"| {i}: {filler}|    |")
+    for chave in cartela['regra_avancada']:
+        filler = " " * (15 - len(str(chave)))
+        if cartela['regra_avancada'][chave] != -1:
+            print(f"| {chave}: {filler}| {cartela['regra_avancada'][chave]:02d} |")
+        else:
+            print(f"| {chave}: {filler}|    |")
+    print("-" * 25)
