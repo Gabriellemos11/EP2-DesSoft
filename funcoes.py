@@ -53,3 +53,9 @@ def calcula_pontos_sequencia_alta(dados):
         if sequencia.issubset(conjunto):
             return 30
     return 0
+
+def calcula_pontos_full_house(dados):
+    for valor in dados:
+        if dados.count(valor) == 3 and dados.count(valor) == 2:
+            return sum(dados)
+    return 0
