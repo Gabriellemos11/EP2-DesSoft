@@ -42,3 +42,8 @@ def calcula_pontos_sequencia_baixa(dados):
         if sequencia.issubset(conjunto):
             return 15
     return 0
+
+def calcula_pontos_sequencia_alta(dados):
+    if dados == [1, 2, 3, 4, 5] or dados == [2, 3, 4, 5, 6]:
+        return 30
+    return 0
