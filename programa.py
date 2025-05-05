@@ -52,42 +52,53 @@ for _ in range(12):
         print(f"Dados rolados: {dados_rolados}")
         print(f"Dados guardados: {dados_guardados}")
         print("Digite 1 para guardar, 2 para remover, 3 para rerrolar, 4 ver cartela, 0 marcar ponto:")
-        opcao = input()
+
+        try:
+            opcao = input().strip()
+        except:
+            break
 
         if opcao == "1":
-            print("Índice do dado (0 a N):")
-            idx = int(input())
-            if 0 <= idx < len(dados_rolados):
-                dados_rolados, dados_guardados = guardar_dado(dados_rolados, dados_guardados, idx)
+            if len(dados_rolados) > 0:
+                print("Índice do dado (0 a N):")
+                idx = int(input())
+                if 0 <= idx < len(dados_rolados):
+                    dados_rolados, dados_guardados = guardar_dado(dados_rolados, dados_guardados, idx)
+
         elif opcao == "2":
-            print("Índice do dado (0 a N):")
-            idx = int(input())
-            if 0 <= idx < len(dados_guardados):
-                dados_rolados, dados_guardados = remover_dado(dados_rolados, dados_guardados, idx)
+            if len(dados_guardados) > 0:
+                print("Índice do dado (0 a N):")
+                idx = int(input())
+                if 0 <= idx < len(dados_guardados):
+                    dados_rolados, dados_guardados = remover_dado(dados_rolados, dados_guardados, idx)
+
         elif opcao == "3":
-            if rerrolagens >= 2:
-                print("Rerrolagens esgotadas.")
-            else:
+            if rerrolagens < 2:
                 rerrolagens += 1
                 dados_rolados = rolar_dados(len(dados_rolados))
+            else:
+                print("Rerrolagens esgotadas.")
+
         elif opcao == "4":
             imprime_cartela(cartela)
+
         elif opcao == "0":
             print("Digite a categoria:")
-            categoria = input()
+            categoria = input().strip()
             todos = dados_rolados + dados_guardados
+
             if categoria in ['1','2','3','4','5','6']:
-                if cartela['regra_simples'][int(categoria)] != -1:
-                    print("Já usada.")
-                else:
+                if cartela['regra_simples'][int(categoria)] == -1:
                     cartela = faz_jogada(todos, categoria, cartela)
                     jogada_feita = True
+                else:
+                    print("Já usada.")
             elif categoria in cartela['regra_avancada']:
-                if cartela['regra_avancada'][categoria] != -1:
-                    print("Já usada.")
-                else:
+                if cartela['regra_avancada'][categoria] == -1:
                     cartela = faz_jogada(todos, categoria, cartela)
                     jogada_feita = True
+                else:
+                    print("Já usada.")
             else:
                 print("Categoria inválida.")
         else:
