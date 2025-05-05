@@ -1,10 +1,8 @@
 import random
+from collections import Counter
 
 def rolar_dados(qtd_dados):
-    resultado = []
-    for _ in range(qtd_dados):
-        resultado.append(random.randint(1, 6))
-    return resultado
+    return [random.randint(1, 6) for _ in range(qtd_dados)]
 
 def guardar_dado(dados_rolados, dados_no_estoque, dado_para_guardar):
     dado = dados_rolados[dado_para_guardar]
@@ -18,85 +16,33 @@ def remover_dado(dados_rolados, dados_no_estoque, dado_para_remover):
     dados_no_estoque.pop(dado_para_remover)
     return [dados_rolados, dados_no_estoque]
 
-def calcula_pontos_regra_simples(dados):
-    resultado = {i: 0 for i in range(1, 7)}
-    for numero in dados:
-        if numero in resultado:
-            resultado[numero] += numero
-    return resultado
-
-def calcula_pontos_soma(dados):
-    total = 0
-    for numero in dados:
-        total += numero
-    return total
-
-def calcula_pontos_sequencia_baixa(dados):
-    conjunto = set(dados)
-    sequencias_baixas = [{1, 2, 3, 4}, {2, 3, 4, 5}, {3, 4, 5, 6}]
-    for seq in sequencias_baixas:
-        if seq.issubset(conjunto):
-            return 15
-    return 0
-
-def calcula_pontos_sequencia_alta(dados):
-    conjunto = set(dados)
-    sequencias_altas = [{1, 2, 3, 4, 5}, {2, 3, 4, 5, 6}]
-    for seq in sequencias_altas:
-        if seq.issubset(conjunto):
-            return 30
-    return 0
-
-def calcula_pontos_full_house(dados):
-    contagens = {}
-    for valor in dados:
-        contagens[valor] = contagens.get(valor, 0) + 1
-    if len(contagens) != 2:
+def calcula_pontuacao(dados, categoria):
+    contagem = Counter(dados)
+    if categoria in ["1", "2", "3", "4", "5", "6"]:
+        numero = int(categoria)
+        return dados.count(numero) * numero
+    elif categoria == "sem_combinacao":
+        return sum(dados)
+    elif categoria == "quadra":
+        for numero, qtd in contagem.items():
+            if qtd >= 4:
+                return sum(dados)
         return 0
-    valores = list(contagens.values())
-    if 3 in valores and 2 in valores:
-        total = 0
-        for numero in dados:
-            total += numero
-        return total
-    return 0
-
-def calcula_pontos_quadra(dados):
-    contagens = {}
-    for valor in dados:
-        contagens[valor] = contagens.get(valor, 0) + 1
-    for qtd in contagens.values():
-        if qtd >= 4:
-            total = 0
-            for numero in dados:
-                total += numero
-            return total
-    return 0
-
-def calcula_pontos_quina(dados):
-    contagens = {}
-    for valor in dados:
-        contagens[valor] = contagens.get(valor, 0) + 1
-    for qtd in contagens.values():
-        if qtd >= 5:
+    elif categoria == "full_house":
+        if sorted(contagem.values()) == [2, 3]:
+            return 25
+        return 0
+    elif categoria == "sequencia_baixa":
+        if set([1,2,3,4]).issubset(dados) or            set([2,3,4,5]).issubset(dados) or            set([3,4,5,6]).issubset(dados):
+            return 30
+        return 0
+    elif categoria == "sequencia_alta":
+        if set([1,2,3,4,5]).issubset(dados) or set([2,3,4,5,6]).issubset(dados):
+            return 40
+        return 0
+    elif categoria == "cinco_iguais":
+        if any(qtd == 5 for qtd in contagem.values()):
             return 50
-    return 0
-
-def calcula_pontos_regra_avancada(dados):
-    return {
-        'cinco_iguais': calcula_pontos_quina(dados),
-        'full_house': calcula_pontos_full_house(dados),
-        'quadra': calcula_pontos_quadra(dados),
-        'sem_combinacao': calcula_pontos_soma(dados),
-        'sequencia_alta': calcula_pontos_sequencia_alta(dados),
-        'sequencia_baixa': calcula_pontos_sequencia_baixa(dados)
-    }
-
-def faz_jogada(dados, categoria, cartela_de_pontos):
-    if categoria in ['1', '2', '3', '4', '5', '6']:
-        pontos = calcula_pontos_regra_simples(dados)
-        cartela_de_pontos['regra_simples'][int(categoria)] = pontos[int(categoria)]
+        return 0
     else:
-        pontos = calcula_pontos_regra_avancada(dados)
-        cartela_de_pontos['regra_avancada'][categoria] = pontos[categoria]
-    return cartela_de_pontos
+        return 0
