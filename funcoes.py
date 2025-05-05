@@ -86,8 +86,7 @@ def calcula_pontos_quadra(dados):
     return 0
 
 def calcula_pontos_quina(dados):
-    for valor in dados:
-        if dados.count(valor) == 5:
-            return 50
+    if len(set(dados)) == 1:
+        return 50
     return 0
 
